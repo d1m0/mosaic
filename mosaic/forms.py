@@ -3,7 +3,11 @@ from wtforms import StringField, BooleanField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Length, regexp
 
 class UploadForm(FlaskForm):
-    video = FileField(u'Video File', validators=[DataRequired()])
+    name = StringField('name', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired()])
+    country = StringField('country', validators=[DataRequired()])
+    city = StringField('city', validators=[DataRequired()])
+    video = StringField('Video File Link', validators=[DataRequired()])
     tags = StringField('tags', default="")
-    location = StringField('location', default="")
+    relationship = SelectField('relationship', choices=[('mom', 'erased mom')])
     release = BooleanField('release', default=False, validators=[DataRequired()])
