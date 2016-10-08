@@ -45,6 +45,8 @@ fi
 
 npm install
 
+# Make tmp directory for logs
+mkdir $DIR/../tmp
+
 echo "export PATH=\$PATH:$MYDIR/node_modules/.bin/" >> $DIR/bin/activate
 echo "To begin developing run source $DIR/bin/activate and then make"
-
