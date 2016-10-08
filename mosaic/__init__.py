@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
+from flask_uploads import UploadSet, configure_uploads
 import os
 
 app = Flask(__name__)
@@ -27,5 +28,9 @@ if not app.debug:
     app.logger.info('mosaic startup')
 
 db = SQLAlchemy(app)
+
+
+videos = UploadSet('videos', ['mov', 'mp4', 'avi', 'mpg', 'mpeg'])
+configure_uploads(app, videos)
 
 from mosaic import views, models
