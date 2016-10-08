@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Submit a story!</h1>
+  <form action="" method="post" name="edit">
+      {{form.hidden_tag()}}
+      <table>
+          <tr>
+              <td>1. TODO: Instructions on how to video.</td>
+              <td>TODO</td>
+          </tr>
+          <tr>
+              <td>Video location:</td>
+              <td>{{ form.video() }}
+                  {% for error in form.video.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                  {% endfor %}<br>
+              </td>
+          </tr>
+          <tr>
+              <td>Tags:</td>
+              <td>{{ form.tags() }}
+                  {% for error in form.tags.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                  {% endfor %}<br>
+              </td>
+          </tr>
+          <tr>
+              <td>Case Location:</td>
+              <td>{{ form.location() }}
+                  {% for error in form.location.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                  {% endfor %}<br>
+              </td>
+          </tr>
+          <tr>
+              <td>Release Form:</td>
+              <td>{{ form.release() }}
+                  {% for error in form.release.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                  {% endfor %}<br>
+              </td>
+          </tr>
+          <tr>
+              <td></td>
+              <td><input type="submit" value="Upload"></td>
+          </tr>
+      </table>
+  </form>
+
+{% endblock %}
