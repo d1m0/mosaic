@@ -9,13 +9,14 @@
           {% macro render_field(field) %}
           <tr>
             <td>{{ field.name | capitalize }} :</td>
-            <td>{{ field }}</td>
+            <td>{{ field | safe}}</td>
             {% if field.errors %}
-              <ul class=errors>
+            <td>
+
               {% for error in field.errors %}
-                <li>{{ error }}</li>
+                <span>{{ error }}</span>
               {% endfor %}
-              </ul>
+            </td>
             {% endif %}
           </tr>
           {% endmacro %}
@@ -26,7 +27,7 @@
           {{ render_field(form.email) }}
           {{ render_field(form.country) }}
           {{ render_field(form.city) }}
-          {{ render_field(form.video) }}
+          {{ render_field(form.video_url) }}
           {{ render_field(form.tags) }}
           {{ render_field(form.relationship) }}
           {{ render_field(form.release) }}
