@@ -3,6 +3,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime
 from .forms import UploadForm
+from .models import User, Submission
 
 @app.errorhandler(404)
 def not_found_error(error):
@@ -22,15 +23,25 @@ def index():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     form = UploadForm();
+
     if form.validate_on_submit():
-        filename = videos.save(request.files['video'])
-        flash('Your changes have been saved as ' + filename)
+        u = User(name=form.name.data, email=form.email.data);
+        s = Submission(time=datetime.utcnow(),
+                       url=form.video_url.data,
+                       author=u,
+                       country=form.country.data,
+                       city=form.city.data,
+                       relation=form.relationship.data,
+                       ip=request.remote_addr);
+        #TODO(dimo): Add tags to db
+        db.session.add(u);
+        db.session.add(s);
+        db.session.commit();
         return redirect(url_for('done'))
 
     return render_template('upload.html',
         title='Upload a story',
         form = form)
-
 
 @app.route('/done', methods=['GET'])
 def done():

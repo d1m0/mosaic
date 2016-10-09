@@ -9,5 +9,5 @@ class UploadForm(FlaskForm):
     city = StringField('City', validators=[DataRequired()])
     video = StringField('Video File Link', validators=[DataRequired()])
     tags = StringField('Tags', default="")
-    relationship = SelectField('Relationship', choices=[('mom', 'erased mom')])
+    relationship = SelectField('Relationship', choices=[('erased_mom', 'erased mom')])
     release = BooleanField('Release', default=False, validators=[DataRequired()])
