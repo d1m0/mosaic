@@ -1,45 +1,36 @@
 {% extends "base.html" %}
+
 {% block content %}
   <h1>Submit a story!</h1>
   <form action="" method="post" name="edit" enctype="multipart/form-data">
       {{form.hidden_tag()}}
       <table>
+
+          {% macro render_field(field) %}
           <tr>
-              <td>1. TODO: Instructions on how to video.</td>
-              <td>TODO</td>
+            <td>{{ field.name | capitalize }} :</td>
+            <td>{{ field }}</td>
+            {% if field.errors %}
+              <ul class=errors>
+              {% for error in field.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+              </ul>
+            {% endif %}
           </tr>
-          <tr>
-              <td>First and last name:</td>
-              <td>{{ form.name() }}
-                  {% for error in form.name.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                  {% endfor %}<br>
-              </td>
-          </tr>
-          <tr>
-              <td>Email:</td>
-              <td>{{ form.email() }}
-                  {% for error in form.email.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                  {% endfor %}<br>
-              </td>
-          </tr>
-          <tr>
-              <td>Country:</td>
-              <td>{{ form.country() }}
-                  {% for error in form.country.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                  {% endfor %}<br>
-              </td>
-          </tr>
-          <tr>
-              <td>Release Form:</td>
-              <td>{{ form.release() }}
-                  {% for error in form.release.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                  {% endfor %}<br>
-              </td>
-          </tr>
+          {% endmacro %}
+
+
+
+          {{ render_field(form.name) }}
+          {{ render_field(form.email) }}
+          {{ render_field(form.country) }}
+          {{ render_field(form.city) }}
+          {{ render_field(form.video) }}
+          {{ render_field(form.tags) }}
+          {{ render_field(form.relationship) }}
+          {{ render_field(form.release) }}
+
           <tr>
               <td></td>
               <td><input type="submit" value="Upload"></td>
