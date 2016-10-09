@@ -20,6 +20,11 @@ def index():
     return render_template('index.html',
         title='Home')
 
+@app.route('/instructions')
+def instructions():
+    return render_template('instructions.html',
+        title='Instructions')
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     form = UploadForm();
