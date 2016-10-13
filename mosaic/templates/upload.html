@@ -46,6 +46,19 @@ I understand that submitting my video does not mean that this footage will be us
             </td>
           </tr>
           {{ render_field(form.release) }}
+          <tr>
+            <td></td>
+            <td>Optional: share with us any information that you could not include in the video, such as current location, websites, social media groups or groups that you active with. 1000 character limit.<br>
+              {{ form.other(cols=70, rows=3) }}  </td>
+              {% if form.other.errors %}
+              <td>
+
+                {% for error in form.other.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </td>
+              {% endif %}
+          </tr>
 
           <tr>
               <td></td>

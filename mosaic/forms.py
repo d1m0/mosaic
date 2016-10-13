@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectField
-from wtforms.validators import DataRequired, Length, regexp, URL, Email
+from wtforms.validators import DataRequired, Length, regexp, URL, Email, optional, length
 from .validators import YoutubeURL
 
 countries = [
@@ -257,3 +257,4 @@ class UploadForm(FlaskForm):
     tags = StringField('Tags', default="")
     relationship = SelectField('Relationship', choices=[('erased_mom', 'erased mom')])
     release = BooleanField('Release', default=False, validators=[DataRequired()])
+    other = TextAreaField('Other', validators=[optional(), length(max=1000)])
