@@ -1,6 +1,8 @@
 from urlparse import urlparse, parse_qs
 from .videos import YouTube
 from . import videoSet
+from wtforms.validators import regexp
+from re import compile
 
 from wtforms.validators import ValidationError
 
@@ -37,7 +39,9 @@ class YoutubeURL(object):
 class FileExt(object):
     def __init__(self):
         self.message = "Extension must be one of " + ",".join(videoSet.extensions)
+        self.re = compile(u'^[^\/\\\\]*\.(' + '|'.join(videoSet.extensions) + ')$')
 
     def __call__(self, form, field):
-        if (not videoSet.extension_allowed(field.data)):
+        print "Trying to validate ", field.data
+        if (not self.re.match(field.data.filename)):
             raise ValidationError(u"Extension must be one of " + ",".join(videoSet.extensions))
