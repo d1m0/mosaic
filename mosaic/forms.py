@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectField
-from wtforms.validators import DataRequired, Length, regexp, URL, Email, optional, length
+from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectField, HiddenField
+from wtforms.validators import DataRequired, Length, regexp, URL, Email, optional, length, AnyOf
+from .models import relationships, submission_types
 from .validators import YoutubeURL
 
 countries = [
@@ -253,8 +254,9 @@ class UploadForm(FlaskForm):
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     country = SelectField('Country', choices=countries, validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
-    video_url = StringField('Video File Link', validators=[DataRequired(), URL(), YoutubeURL()])
+    submission_type = HiddenField("submission type", default="local", validators=[AnyOf(submission_types)])
+    video_url = StringField('Video File', validators=[DataRequired(), URL(), YoutubeURL()])
     tags = StringField('Tags', default="")
-    relationship = SelectField('Relationship', choices=[('erased_mom', 'erased mom')])
-    release = BooleanField('Release', default=False, validators=[DataRequired()])
+    relationship = SelectField('Relationship', choices=[('erased_mom', 'erased mom')], validators=[AnyOf(relationships)])
+    release = BooleanField('I Agree', default=False, validators=[DataRequired()])
     other = TextAreaField('Other', validators=[optional(), length(max=1000)])

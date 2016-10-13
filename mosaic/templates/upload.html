@@ -8,7 +8,7 @@
 
           {% macro render_field(field) %}
           <tr>
-            <td>{{ field.name | capitalize }} :</td>
+            <td>{{ field.label.text | capitalize }} :</td>
             <td>{{ field | safe}}</td>
             {% if field.errors %}
             <td>
@@ -27,6 +27,7 @@
           {{ render_field(form.email) }}
           {{ render_field(form.country) }}
           {{ render_field(form.city) }}
+          {{ form.submission_type }}
           {{ render_field(form.video_url) }}
           {{ render_field(form.tags) }}
           {{ render_field(form.relationship) }}
