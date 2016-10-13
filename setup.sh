@@ -31,6 +31,7 @@ pip install flask-uploads
 pip install guess_language
 pip install flipflop
 pip install coverage
+pip install google-api-python-client
 
 if [ ! -d $DIR/third_party ] ; then
   mkdir $DIR/third_party
@@ -48,6 +49,13 @@ npm install
 
 # Make tmp directory for logs
 mkdir $DIR/../tmp
+
+# Install bootstrap
+pushd $DIR/../mosaic/static/
+wget https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip
+unzip bootstrap-3.3.7-dist.zip
+rm bootstrap-3.3.7-dist.zip
+popd
 
 echo "export PATH=\$PATH:$MYDIR/node_modules/.bin/" >> $DIR/bin/activate
 echo "To begin developing run source $DIR/bin/activate and then make"
