@@ -1,5 +1,6 @@
 from urlparse import urlparse, parse_qs
 from .videos import YouTube
+from . import videoSet
 
 from wtforms.validators import ValidationError
 
@@ -32,3 +33,11 @@ class YoutubeURL(object):
                 # todo: yt_result on success is a json, check if videos list is empty
                 if yt_result:
                     raise ValidationError(u"Youtube video does not exist")
+
+class FileExt(object):
+    def __init__(self):
+        self.message = "Extension must be one of " + ",".join(videoSet.extensions)
+
+    def __call__(self, form, field):
+        if (not videoSet.extension_allowed(field.data)):
+            raise ValidationError(u"Extension must be one of " + ",".join(videoSet.extensions))
