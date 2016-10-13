@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
-from flask_uploads import UploadSet, configure_uploads
+from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAX_VIDEO_SIZE
+from flask_uploads import UploadSet, configure_uploads, patch_request_class
 import os
 
 app = Flask(__name__)
@@ -30,7 +30,8 @@ if not app.debug:
 db = SQLAlchemy(app)
 
 
-videos = UploadSet('videos', ['mov', 'mp4', 'avi', 'mpg', 'mpeg'])
-configure_uploads(app, videos)
+videoSet = UploadSet('videos', ['mov', 'mp4', 'avi', 'mpg', 'mpeg'])
+configure_uploads(app, videoSet)
+patch_request_class(app, MAX_VIDEO_SIZE)
 
 from mosaic import views, models
