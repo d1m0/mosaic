@@ -26,3 +26,5 @@ MAIL_PASSWORD = None
 ADMINS = ['you@example.com']
 
 UPLOADED_VIDEOS_DEST= basedir + "/tmp/video"
+
+MAX_VIDEO_SIZE=64*1024*1024 #64MB
