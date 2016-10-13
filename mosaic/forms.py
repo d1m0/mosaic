@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectField, HiddenField
 from wtforms.validators import DataRequired, Length, regexp, URL, Email, optional, length, AnyOf
 from .models import relationships, submission_types
-from .validators import YoutubeURL
+from .validators import YoutubeURL, FileExt
 
 countries = [
     ('US',  'United States'),
@@ -255,7 +255,7 @@ class UploadForm(FlaskForm):
     country = SelectField('Country', choices=countries, validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
     submission_type = HiddenField("submission type", default="local", validators=[AnyOf(submission_types)])
-    video_url = StringField('Video File', validators=[DataRequired(), URL(), YoutubeURL()])
+    video_url = FileField('Video File', validators=[DataRequired(), FileExt()])
     tags = StringField('Tags', default="")
     relationship = SelectField('Relationship', choices=[('erased_mom', 'erased mom')], validators=[AnyOf(relationships)])
     release = BooleanField('I Agree', default=False, validators=[DataRequired()])

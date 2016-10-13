@@ -4,6 +4,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime
 from .forms import UploadForm
 from .models import User, Submission
+from . import videoSet
 
 @app.errorhandler(404)
 def not_found_error(error):
@@ -29,10 +30,12 @@ def instructions():
 def upload():
     form = UploadForm();
 
-    if form.validate_on_submit():
+    if form.validate_on_submit() and 'video_url' in request.files:
+        filename = videoSet.save(request.files['video_url'])
         u = User(name=form.name.data, email=form.email.data);
         s = Submission(time=datetime.utcnow(),
-                       url=form.video_url.data,
+                       submission_type=form.submission_type.data,
+                       url=filename,
                        author=u,
                        country=form.country.data,
                        city=form.city.data,
