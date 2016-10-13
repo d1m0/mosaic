@@ -19,4 +19,5 @@ class Submission(db.Model):
     city = db.Column(db.String(120), index=True)
     relation = db.Column(db.Enum(*relationships), index=True)
     ip = db.Column(db.String(128), index=True)
+    tags = db.Column(db.String(1024), index=True)
     other = db.Column(db.String(1000), index=True)

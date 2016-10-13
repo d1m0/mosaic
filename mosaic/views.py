@@ -40,8 +40,10 @@ def upload():
                        country=form.country.data,
                        city=form.city.data,
                        relation=form.relationship.data,
-                       ip=request.remote_addr);
-        #TODO(dimo): Add tags to db
+                       ip=request.remote_addr,
+                       tags=form.tags.data,
+                       other=form.other.data);
+
         db.session.add(u);
         db.session.add(s);
         db.session.commit();
