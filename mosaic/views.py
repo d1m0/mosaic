@@ -26,6 +26,17 @@ def instructions():
     return render_template('instructions.html',
         title='Instructions')
 
+@app.route('/file_upload', methods=['GET', 'POST'])
+def file_upload():
+    print request.files
+    res = {
+        'files': [
+            { 'name': request.files[f].filename, "size": 1000 } for f in request.files
+        ]
+    }
+    print "Result: ", res
+    return str(res)
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     form = UploadForm();
