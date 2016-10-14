@@ -55,6 +55,14 @@ pushd $DIR/../mosaic/static/
 wget https://github.com/twbs/bootstrap/releases/download/v3.3.7/bootstrap-3.3.7-dist.zip
 unzip bootstrap-3.3.7-dist.zip
 rm bootstrap-3.3.7-dist.zip
+
+wget https://code.jquery.com/jquery-3.1.1.min.js
+wget https://github.com/blueimp/jQuery-File-Upload/archive/9.12.5.zip
+unzip 9.12.5.zip
+rm 9.12.5.zip
+
+wget http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js
+wget http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js
 popd
 
 echo "export PATH=\$PATH:$MYDIR/node_modules/.bin/" >> $DIR/bin/activate
