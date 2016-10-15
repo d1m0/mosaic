@@ -10,9 +10,7 @@
           {% macro render_field(field) %}
           <tr>
             <td>{{ field.label.text | capitalize }} :</td>
-            <td>{{ field | safe}}</td>
-            <td id='{{ field.name }}_err'>
-            </td>
+            <td> {{ field | safe}} <br> <div id='{{ field.name }}_err' class='error_div'> </div> </td>
           </tr>
           {% endmacro %}
 
@@ -65,7 +63,7 @@ I understand that submitting my video does not mean that this footage will be us
 
           <tr>
               <td></td>
-              <td><input type="submit" value="Upload" id='submit_btn'></td>
+              <td><input type="submit" value="Submit" id='submit_btn'></td>
           </tr>
       </table>
 
@@ -120,7 +118,6 @@ $(function () {
         }
         $.each(data.files, function (index, file) {
             var node = $('<p/>')
-                    .append($('<span/>').text(file.name));
             if (!index) {
                 node
                     .append('<br>')
@@ -204,6 +201,7 @@ $(function () {
         }
       })
 
+      $("#release_err").html("")
       if ($("input[name=release]")[0].checked)
         fmData["release"] = "y";
 

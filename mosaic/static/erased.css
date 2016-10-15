@@ -7,3 +7,7 @@
   width: 200px;
   height: 100px;
 }
+
+.error {
+  color: red;
+}
