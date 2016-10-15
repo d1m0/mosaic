@@ -2,22 +2,17 @@
 
 {% block content %}
   <h1>Submit a story!</h1>
-  <form action="" method="post" name="edit" enctype="multipart/form-data">
-      {{form.hidden_tag()}}
+      <div id='hidden_fields'>
+      {{ form.hidden_tag() }}
+      </div>
       <table>
 
           {% macro render_field(field) %}
           <tr>
             <td>{{ field.label.text | capitalize }} :</td>
             <td>{{ field | safe}}</td>
-            {% if field.errors %}
-            <td>
-
-              {% for error in field.errors %}
-                <span>{{ error }}</span>
-              {% endfor %}
+            <td id='{{ field.name }}_err'>
             </td>
-            {% endif %}
           </tr>
           {% endmacro %}
 
@@ -27,7 +22,6 @@
           {{ render_field(form.email) }}
           {{ render_field(form.country) }}
           {{ render_field(form.city) }}
-          {{ form.submission_type }}
           <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div>
           </td></tr>
           {{ render_field(form.tags) }}
@@ -64,10 +58,9 @@ I understand that submitting my video does not mean that this footage will be us
 
           <tr>
               <td></td>
-              <td><input type="submit" value="Upload"></td>
+              <td><input type="submit" value="Upload" id='submit_btn'></td>
           </tr>
       </table>
-  </form>
 
 {% endblock %}
 
@@ -80,7 +73,6 @@ I understand that submitting my video does not mean that this footage will be us
 <script src="static/jQuery-File-Upload-9.12.5/js/jquery.fileupload-process.js"></script>
 <script src="static/jQuery-File-Upload-9.12.5/js/jquery.fileupload-video.js"></script>
 <script src="static/jQuery-File-Upload-9.12.5/js/jquery.fileupload-validate.js"></script>
-
 
 <script>
 $(function () {
@@ -102,10 +94,12 @@ $(function () {
                     $this.remove();
                     data.abort();
                 });
+            data.context.append('<div id="progress"><div class="progress-bar" style="width: 0%">&nbsp;</div></div>')
             data.submit().always(function () {
                 $this.remove();
             });
         });
+
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
@@ -154,12 +148,9 @@ $(function () {
         );
     }).on('fileuploaddone', function (e, data) {
         $.each(data.result.files, function (index, file) {
+            console.log(file)
             if (file.url) {
-                var link = $('<a>')
-                    .attr('target', '_blank')
-                    .prop('href', file.url);
-                $(data.context.children()[index])
-                    .wrap(link);
+              $("#hidden_fields").append("<input type='hidden' name='video_url' value='" + file.url + "' />");
             } else if (file.error) {
                 var error = $('<span class="text-danger"/>').text(file.error);
                 $(data.context.children()[index])
@@ -178,6 +169,60 @@ $(function () {
         });
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+    $("#submit_btn").on('click', function (e) {
+      if ($("input[name=video_url]").length == 0) {
+        alert("Need to upload a video first!");
+        e.stopPropagation();
+        return false;
+      }
+
+      var req_fields = [
+        "csrf_token", "name", "email", "country", "city",
+        "submission_type", "video_url", "tags", "relationship",
+        "other"
+      ]
+
+      var fmData = { }
+
+      req_fields.forEach(function (f) {
+        $("#" + f + "_err").html("")
+        var inps = $("input[name=" + f + "], select[name=" + f + "]")
+        if (inps.length == 0 || inps[0].value === undefined) {
+          fmData[f] = "";
+        } else {
+          fmData[f] = inps[0].value;
+        }
+      })
+
+      if ($("input[name=release]")[0].checked)
+        fmData["release"] = "y";
+
+      console.log(fmData)
+      $.ajax({
+        type: "POST",
+        url: "/upload_submit",
+        data: fmData,
+        dataType: "JSON",
+        success: function (res) {
+          var noErrors = true;
+          for (var field in res) {
+            noErrors = false;
+            var msgs= res[field];
+            if (msgs.length == 0) return;
+
+            var error_td = $("#" + field + "_err")
+            for (var i in msgs) {
+              $(error_td).append("<span class='error'>" + msgs[i]+ "</span><br>")
+            }
+          }
+
+          if (noErrors) {
+            window.location.href="/done";
+          }
+        }
+      })
+    })
 });
 </script>
 
