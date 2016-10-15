@@ -257,17 +257,17 @@ class UploadForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
 
-    homeCountry = SelectField('Home Country', choices=countries, validators=[DataRequired()])
-    homeCity = StringField('Home City', validators=[DataRequired()])
+    homeCountry = SelectField('Country', choices=countries, validators=[DataRequired()])
+    homeCity = StringField('City', validators=[DataRequired()])
 
-    courtCountry = SelectField('Court Country', choices=countries, validators=[DataRequired()])
-    courtCity = StringField('Court City', validators=[DataRequired()])
+    courtCountry = SelectField('Country', choices=countries, validators=[DataRequired()])
+    courtCity = StringField('City', validators=[DataRequired()])
 
-    lastChildVisit = DateField('Last child visit', format='%d/%m/%Y', validators=[DataRequired()])
+    lastChildVisit = DateField('Last child visit:', format='%d/%m/%Y', validators=[DataRequired()])
     childVisitFrequency = IntegerField('Child visits per month', validators=[DataRequired()])
     numChildren = IntegerField('Number of affected children', validators=[DataRequired()])
 
-    courtCosts = IntegerField('Legal fees in US dollars, excluding child support', validators=[DataRequired()])
+    courtCosts = IntegerField('Legal fees in USD', validators=[DataRequired()])
 
     submission_type = HiddenField("submission type", default="local", validators=[AnyOf(submission_types)])
     #video_url = FileField('Video File', validators=[DataRequired(), FileExt()])
