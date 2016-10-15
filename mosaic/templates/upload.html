@@ -155,6 +155,8 @@ $(function () {
             console.log(file)
             if (file.url) {
               $("#hidden_fields").append("<input type='hidden' name='video_url' value='" + file.url + "' />");
+              $("#progress").remove();
+              $("#upload_detail").append("<span class='success'> " + file.name + " (" + parseInt(file.size/ (1024*1024.0)) + "MB) was successfully uploaded.</span>")
             } else if (file.error) {
                 var error = $('<span class="text-danger"/>').text(file.error);
                 $(data.context.children()[index])
