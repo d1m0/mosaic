@@ -5,6 +5,8 @@ from datetime import datetime
 from .forms import UploadForm
 from .models import User, Submission
 from . import videoSet
+from json import dumps
+import os
 
 @app.errorhandler(404)
 def not_found_error(error):
@@ -28,25 +30,30 @@ def instructions():
 
 @app.route('/file_upload', methods=['GET', 'POST'])
 def file_upload():
-    print request.files
-    res = {
-        'files': [
-            { 'name': request.files[f].filename, "size": 1000 } for f in request.files
-        ]
-    }
+    res = { 'files' : [ ]}
+    for f in request.files:
+        file = request.files[f]
+        print file.filename
+        ul_filename = videoSet.save(file)
+        ui_full_filename = videoSet.path(file.filename)
+        print ul_filename, ui_full_filename
+        size = os.path.getsize(ui_full_filename)
+        res['files'].append({
+            'name': file.filename,
+            "size": size,
+            "url": ul_filename });
     print "Result: ", res
-    return str(res)
+    return dumps(res)
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
+@app.route('/upload_submit', methods=['POST'])
+def upload_submit():
     form = UploadForm();
 
-    if form.validate_on_submit() and 'video_url' in request.files:
-        filename = videoSet.save(request.files['video_url'])
+    if form.validate_on_submit():
         u = User(name=form.name.data, email=form.email.data);
         s = Submission(time=datetime.utcnow(),
                        submission_type=form.submission_type.data,
-                       url=filename,
+                       url=form.video_url.data,
                        author=u,
                        country=form.country.data,
                        city=form.city.data,
@@ -58,11 +65,15 @@ def upload():
         db.session.add(u);
         db.session.add(s);
         db.session.commit();
-        return redirect(url_for('done'))
+        return dumps(form.errors)
+    else:
+        return dumps(form.errors)
 
+@app.route('/upload')
+def upload():
     return render_template('upload.html',
         title='Upload a story',
-        form = form)
+        form = UploadForm())
 
 @app.route('/done', methods=['GET'])
 def done():
