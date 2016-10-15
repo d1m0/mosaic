@@ -33,6 +33,7 @@ pip install flipflop
 pip install coverage
 pip install google-api-python-client
 pip install dropbox
+pip install titlecase
 
 if [ ! -d $DIR/third_party ] ; then
   mkdir $DIR/third_party

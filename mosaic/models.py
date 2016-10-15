@@ -1,6 +1,9 @@
 from mosaic import db
 
-relationships = [ "erased_mom" ]
+relationships = map( lambda name: "erased_" + name, [
+        "mom", "dad", "sister", "brother", "grandparent", "aunt_or_uncle",
+        "cousin", "other_family", "step_family", "friend"
+    ])
 submission_types = [ "local", "external" ]
 
 class User(db.Model):

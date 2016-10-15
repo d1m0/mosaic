@@ -3,6 +3,7 @@ from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectF
 from wtforms.validators import DataRequired, Length, regexp, URL, Email, optional, length, AnyOf
 from .models import relationships, submission_types
 from .validators import YoutubeURL, FileExt
+from titlecase import titlecase
 
 countries = [
     ('US',  'United States'),
@@ -249,6 +250,9 @@ countries = [
     ('ZZ',  'Other')
 ]
 
+def _buildRelationships():
+    return [(name, titlecase(name.replace("_", " "))) for name in relationships] 
+
 class UploadForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
@@ -258,6 +262,6 @@ class UploadForm(FlaskForm):
     #video_url = FileField('Video File', validators=[DataRequired(), FileExt()])
     video_url = StringField('Video File', validators=[DataRequired()])
     tags = StringField('Tags', default="")
-    relationship = SelectField('Relationship', choices=[('erased_mom', 'erased mom')], validators=[AnyOf(relationships)])
+    relationship = SelectField('Relationship', choices=_buildRelationships(), validators=[AnyOf(relationships)])
     release = BooleanField('I Agree', default=False, validators=[DataRequired(), AnyOf([True], message="You must accept release to submit")])
     other = TextAreaField('Other', validators=[optional(), length(max=1000)])

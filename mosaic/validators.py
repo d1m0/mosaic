@@ -1,5 +1,5 @@
 from urlparse import urlparse, parse_qs
-from .videos import YouTube
+# from .videos import YouTube
 from . import videoSet
 from wtforms.validators import regexp
 from re import compile
@@ -30,7 +30,7 @@ class YoutubeURL(object):
             else:
                 # todo: try catch on google http errors
                 # try:
-                yt_result = YouTube.videos().list(id=query['v'], part='snippet').execute()
+                yt_result = False #YouTube.videos().list(id=query['v'], part='snippet').execute()
 
                 # todo: yt_result on success is a json, check if videos list is empty
                 if yt_result:
