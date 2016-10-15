@@ -10,9 +10,7 @@
           {% macro render_field(field) %}
           <tr>
             <td>{{ field.label.text | capitalize }} :</td>
-            <td>{{ field | safe}}</td>
-            <td id='{{ field.name }}_err'>
-            </td>
+            <td> {{ field | safe}} <br> <div id='{{ field.name }}_err' class='error_div'> </div> </td>
           </tr>
           {% endmacro %}
 
@@ -204,6 +202,7 @@ $(function () {
         }
       })
 
+      $("#release_err").html("")
       if ($("input[name=release]")[0].checked)
         fmData["release"] = "y";
 
