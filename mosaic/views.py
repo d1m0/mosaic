@@ -34,16 +34,16 @@ def file_upload():
     res = { 'files' : [ ]}
     for f in request.files:
         file = request.files[f]
-        print file.filename
+        app.logger.info(file.filename)
         ul_filename = videoSet.save(file)
         ui_full_filename = videoSet.path(file.filename)
-        print ul_filename, ui_full_filename
+        app.logger.info(ul_filename + "," + ui_full_filename)
         size = os.path.getsize(ui_full_filename)
         res['files'].append({
             'name': file.filename,
             "size": size,
             "url": ul_filename });
-    print "Result: ", res
+    app.logger.info("Result: " + str(res))
     return dumps(res)
 
 @app.route('/upload_submit', methods=['POST'])

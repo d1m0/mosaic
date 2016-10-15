@@ -2,3 +2,8 @@
   background-image: url('erasing_family_banner.jpg');
   min-height: 250px;
 }
+
+#upload_detail p video {
+  width: 200px;
+  height: 100px;
+}
