@@ -41,8 +41,8 @@ class Submission(db.Model):
 
     tags = db.Column(db.String(1024), index=True)
 
-    milestone = db.Column(db.String(1024), index=True)
+    milestones = db.Column(db.String(1024), index=True)
 
-    related = db.Column(db.String(512), index=True)
+    related_submission = db.Column(db.String(512), index=True)
 
     other = db.Column(db.String(1000), index=True)

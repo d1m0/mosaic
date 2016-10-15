@@ -254,7 +254,8 @@ def _buildRelationships():
     return [(name, titlecase(name.replace("_", " "))) for name in relationships]
 
 class UploadForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
 
     homeCountry = SelectField('Country', choices=countries, validators=[DataRequired()])
@@ -265,9 +266,12 @@ class UploadForm(FlaskForm):
 
     lastChildVisit = DateField('Last child visit:', format='%d/%m/%Y', validators=[DataRequired()])
     childVisitFrequency = IntegerField('Child visits per month', validators=[DataRequired()])
-    numChildren = IntegerField('Number of affected children', validators=[DataRequired()])
+    numChildren = IntegerField('Number of affected kids', validators=[DataRequired()])
 
-    courtCosts = IntegerField('Legal fees in USD', validators=[DataRequired()])
+    milestones = StringField("What is the most important moment you missed?")
+    related_submission = StringField("Is this related to another submission?")
+
+    courtCosts = IntegerField('Legal fees in us $', validators=[DataRequired()])
 
     submission_type = HiddenField("submission type", default="local", validators=[AnyOf(submission_types)])
     #video_url = FileField('Video File', validators=[DataRequired(), FileExt()])

@@ -51,7 +51,7 @@ def upload_submit():
     form = UploadForm();
 
     if form.validate_on_submit():
-        u = User(name=form.name.data, email=form.email.data);
+        u = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data);
         # lastVisitDT = datetime.datetime.strptime(form.lastChildVisit.data, '%m/%d/%Y');
 
         s = Submission(time=datetime.datetime.utcnow(),
@@ -66,6 +66,8 @@ def upload_submit():
                        lastChildVisit=form.lastChildVisit.data,
                        childVisitFrequency=form.childVisitFrequency.data,
                        numChildren=form.numChildren.data,
+                       milestones=form.milestones.data,
+                       related_submission=form.related_submission.data,
                        relation=form.relationship.data,
                        ip=request.remote_addr,
                        tags=form.tags.data,

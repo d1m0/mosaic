@@ -24,8 +24,8 @@
 
 
           {{ render_field(form.relationship) }}
-          <tr> <td> First Name: </td> <td> <input type='text' name='first_name' /> <br> <div id='name_err' class='error_div'> </div> </td> </tr>
-          <tr> <td> Last Name: </td> <td> <input type='text' name='last_name' /> (*will be kept private)</td> </tr>
+          {{ render_field(form.first_name) }}
+          {{ render_field_extra(form.last_name, "(*will be kept private)") }}
           {{ render_field_extra(form.email, "Note: Your e-mail will be kept private") }}
           <tr> <td> </td> <td> Current location: <br> </td> </tr>
           {{ render_field(form.homeCountry) }}
@@ -37,13 +37,14 @@
           {{ render_field_extra(form.lastChildVisit, "(dd/mm/yyyy)") }}
           {{ render_field(form.childVisitFrequency) }}
           {{ render_field(form.numChildren) }}
+          {{ render_field_extra(form.milestones, "(e.g. first steps? high school graduation?)") }}
+          {{ render_field_extra(form.related_submission, "(enter e-mail of person who made other submission)") }}
 
-          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div>
+          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div><div>(Max: 512MB) </div>
           </td></tr>
-          {{ render_field(form.tags) }}
           <tr>
             <td>Optional:</td>
-            <td>Is there anything not includeed in the video? (e.g. related websites, social media groups or groups you're associated with? <br>
+            <td>Is there anything not includeed in the video? (e.g. related websites, social media groups or groups you're associated with?(1000 chars limit) <br>
               {{ form.other(cols=40, rows=3) }}  </td>
           </tr>
           <tr>
@@ -186,14 +187,14 @@ $(function () {
       }
 
       const req_fields = [
-        "csrf_token", "email", "homeCountry", "homeCity",
+        "csrf_token", "email", "first_name", "last_name", "homeCountry", "homeCity",
         "courtCountry", "courtCity", "lastChildVisit", "numChildren",
-        "childVisitFrequency", "courtCosts",
-        "submission_type", "video_url", "tags", "relationship",
+        "childVisitFrequency", "courtCosts", "milestones", "related",
+        "submission_type", "video_url", "relationship",
         "other"
       ]
 
-      var fmData = { }
+      var fmData = { "tags": "" }
 
       req_fields.forEach(function (f) {
         $("#" + f + "_err").html("")
