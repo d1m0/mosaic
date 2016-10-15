@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectField, HiddenField
+from wtforms import StringField, BooleanField, TextAreaField, FileField, SelectField, HiddenField, DateField, IntegerField
 from wtforms.validators import DataRequired, Length, regexp, URL, Email, optional, length, AnyOf
 from .models import relationships, submission_types
 from .validators import YoutubeURL, FileExt
@@ -251,13 +251,24 @@ countries = [
 ]
 
 def _buildRelationships():
-    return [(name, titlecase(name.replace("_", " "))) for name in relationships] 
+    return [(name, titlecase(name.replace("_", " "))) for name in relationships]
 
 class UploadForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
-    country = SelectField('Country', choices=countries, validators=[DataRequired()])
-    city = StringField('City', validators=[DataRequired()])
+
+    homeCountry = SelectField('Home Country', choices=countries, validators=[DataRequired()])
+    homeCity = StringField('Home City', validators=[DataRequired()])
+
+    courtCountry = SelectField('Court Country', choices=countries, validators=[DataRequired()])
+    courtCity = StringField('Court City', validators=[DataRequired()])
+
+    lastChildVisit = DateField('Last child visit', format='%d/%m/%Y', validators=[DataRequired()])
+    childVisitFrequency = IntegerField('Child visits per month', validators=[DataRequired()])
+    numChildren = IntegerField('Number of affected children', validators=[DataRequired()])
+
+    courtCosts = IntegerField('Legal fees in US dollars, excluding child support', validators=[DataRequired()])
+
     submission_type = HiddenField("submission type", default="local", validators=[AnyOf(submission_types)])
     #video_url = FileField('Video File', validators=[DataRequired(), FileExt()])
     video_url = StringField('Video File', validators=[DataRequired()])

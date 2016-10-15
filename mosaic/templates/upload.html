@@ -18,14 +18,21 @@
 
 
 
+          {{ render_field(form.relationship) }}
           {{ render_field(form.name) }}
           {{ render_field(form.email) }}
-          {{ render_field(form.country) }}
-          {{ render_field(form.city) }}
+          {{ render_field(form.homeCountry) }}
+          {{ render_field(form.homeCity) }}
+          {{ render_field(form.courtCountry) }}
+          {{ render_field(form.courtCity) }}
+          {{ render_field(form.courtCosts) }}
+          {{ render_field(form.lastChildVisit) }}
+          {{ render_field(form.childVisitFrequency) }}
+          {{ render_field(form.numChildren) }}
+
           <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div>
           </td></tr>
           {{ render_field(form.tags) }}
-          {{ render_field(form.relationship) }}
           <tr>
             <td></td>
             <td>
@@ -177,8 +184,10 @@ $(function () {
         return false;
       }
 
-      var req_fields = [
-        "csrf_token", "name", "email", "country", "city",
+      const req_fields = [
+        "csrf_token", "name", "email", "homeCountry", "homeCity",
+        "courtCountry", "courtCity", "lastChildVisit", "numChildren",
+        "childVisitFrequency", "courtCosts",
         "submission_type", "video_url", "tags", "relationship",
         "other"
       ]

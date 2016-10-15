@@ -15,12 +15,29 @@ class User(db.Model):
 class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.DateTime)
+
+    lastChildVisit = db.Column(db.DateTime)
+    childVisitFrequency = db.Column(db.Integer)
+    numChildren = db.Column(db.Integer)
+
     submission_type = db.Column(db.Enum(*submission_types), index=True)
+
     url = db.Column(db.String(1024), index=True)
+
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    country = db.Column(db.String(120), index=True)
-    city = db.Column(db.String(120), index=True)
+
+    homeCountry = db.Column(db.String(120), index=True)
+    homeCity = db.Column(db.String(120), index=True)
+
+    courtCountry = db.Column(db.String(120), index=True)
+    courtCity = db.Column(db.String(120), index=True)
+
+    courtCosts = db.Column(db.Integer)
+
     relation = db.Column(db.Enum(*relationships), index=True)
+
     ip = db.Column(db.String(128), index=True)
+
     tags = db.Column(db.String(1024), index=True)
+
     other = db.Column(db.String(1000), index=True)

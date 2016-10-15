@@ -1,12 +1,13 @@
 from mosaic import app, db, videos
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
-from datetime import datetime
 from .forms import UploadForm
 from .models import User, Submission
 from . import videoSet
 from json import dumps
 import os
+import time
+import datetime
 
 @app.errorhandler(404)
 def not_found_error(error):
@@ -51,12 +52,20 @@ def upload_submit():
 
     if form.validate_on_submit():
         u = User(name=form.name.data, email=form.email.data);
-        s = Submission(time=datetime.utcnow(),
+        # lastVisitDT = datetime.datetime.strptime(form.lastChildVisit.data, '%m/%d/%Y');
+
+        s = Submission(time=datetime.datetime.utcnow(),
                        submission_type=form.submission_type.data,
                        url=form.video_url.data,
                        author=u,
-                       country=form.country.data,
-                       city=form.city.data,
+                       homeCountry=form.homeCountry.data,
+                       homeCity=form.homeCity.data,
+                       courtCountry=form.courtCountry.data,
+                       courtCity=form.courtCity.data,
+                       courtCosts=form.courtCosts.data,
+                       lastChildVisit=form.lastChildVisit.data,
+                       childVisitFrequency=form.childVisitFrequency.data,
+                       numChildren=form.numChildren.data,
                        relation=form.relationship.data,
                        ip=request.remote_addr,
                        tags=form.tags.data,
