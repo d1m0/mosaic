@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Submit a story!</h1>
+  <h1>Submit your story</h1>
       <div id='hidden_fields'>
       {{ form.hidden_tag() }}
       </div>
@@ -14,27 +14,43 @@
           </tr>
           {% endmacro %}
 
+          {% macro render_field_extra(field, extra) %}
+          <tr>
+            <td>{{ field.label.text | capitalize }} :</td>
+            <td> {{ field | safe}} {{ extra }} <br> <div id='{{ field.name }}_err' class='error_div'> </div> </td>
+          </tr>
+          {% endmacro %}
+
 
 
           {{ render_field(form.relationship) }}
-          {{ render_field(form.name) }}
-          {{ render_field(form.email) }}
+          {{ render_field(form.first_name) }}
+          {{ render_field_extra(form.last_name, "(*will be kept private)") }}
+          {{ render_field_extra(form.email, "Note: Your e-mail will be kept private") }}
+          <tr> <td> </td> <td> Current location: <br> </td> </tr>
           {{ render_field(form.homeCountry) }}
           {{ render_field(form.homeCity) }}
+          <tr> <td> </td> <td> Location of court case: <br> </td> </tr>
           {{ render_field(form.courtCountry) }}
           {{ render_field(form.courtCity) }}
-          {{ render_field(form.courtCosts) }}
-          {{ render_field(form.lastChildVisit) }}
+          {{ render_field_extra(form.courtCosts, "(*excluding child support)") }}
+          {{ render_field_extra(form.lastChildVisit, "(dd/mm/yyyy)") }}
           {{ render_field(form.childVisitFrequency) }}
           {{ render_field(form.numChildren) }}
+          {{ render_field_extra(form.milestones, "(e.g. first steps? high school graduation?)") }}
+          {{ render_field_extra(form.related_submission, "(enter e-mail of person who made other submission)") }}
 
-          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div>
+          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div><div>(Max: 512MB) </div>
           </td></tr>
-          {{ render_field(form.tags) }}
+          <tr>
+            <td>Optional:</td>
+            <td>Is there anything not includeed in the video? (e.g. related websites, social media groups or groups you're associated with?(1000 chars limit) <br>
+              {{ form.other(cols=40, rows=3) }}  </td>
+          </tr>
           <tr>
             <td></td>
             <td>
-            <textarea readonly='true' cols=70 rows=20>
+            <textarea readonly='true' cols=40 rows=20>
 By checking the below box I agree to the following:
 The purpose of the “Erasing Family” (tentative title) documentary and related #Erased project is to raise awareness of family bond obstruction.
 I hereby grant Ginger Gentile, D.B.A. Erasing Family Films, (hereby referred to as “Producer”) permission to use my voice and physical likeness for the purpose of producing the documentary and related promotional materials.
@@ -47,19 +63,6 @@ I understand that submitting my video does not mean that this footage will be us
             </td>
           </tr>
           {{ render_field(form.release) }}
-          <tr>
-            <td></td>
-            <td>Optional: share with us any information that you could not include in the video, such as current location, websites, social media groups or groups that you active with. 1000 character limit.<br>
-              {{ form.other(cols=70, rows=3) }}  </td>
-              {% if form.other.errors %}
-              <td>
-
-                {% for error in form.other.errors %}
-                  <span>{{ error }}</span>
-                {% endfor %}
-              </td>
-              {% endif %}
-          </tr>
 
           <tr>
               <td></td>
@@ -155,6 +158,8 @@ $(function () {
             console.log(file)
             if (file.url) {
               $("#hidden_fields").append("<input type='hidden' name='video_url' value='" + file.url + "' />");
+              $("#progress").remove();
+              $("#upload_detail").append("<span class='success'> " + file.name + " (" + parseInt(file.size/ (1024*1024.0)) + "MB) was successfully uploaded.</span>")
             } else if (file.error) {
                 var error = $('<span class="text-danger"/>').text(file.error);
                 $(data.context.children()[index])
@@ -181,15 +186,15 @@ $(function () {
         return false;
       }
 
-      var req_fields = [
-        "csrf_token", "name", "email", "homeCountry", "homeCity",
+      var req_fields =  [
+        "csrf_token", "email", "first_name", "last_name", "homeCountry", "homeCity",
         "courtCountry", "courtCity", "lastChildVisit", "numChildren",
-        "childVisitFrequency", "courtCosts",
-        "submission_type", "video_url", "tags", "relationship",
+        "childVisitFrequency", "courtCosts", "milestones", "related",
+        "submission_type", "video_url", "relationship",
         "other"
       ]
 
-      var fmData = { }
+      var fmData = { "tags": "" }
 
       req_fields.forEach(function (f) {
         $("#" + f + "_err").html("")
@@ -200,6 +205,9 @@ $(function () {
           fmData[f] = inps[0].value;
         }
       })
+
+      fmData["name"] = $('input[name="first_name"]')[0].value + " " +
+                        $('input[name="last_name"]')[0].value
 
       $("#release_err").html("")
       if ($("input[name=release]")[0].checked)
