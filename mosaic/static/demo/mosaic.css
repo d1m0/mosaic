@@ -1,0 +1,12 @@
+.mosaic-sizer { width: 20%; }
+
+.mosaic-item {
+  z-index: 1000;
+}
+
+.mosaic-grid {
+  z-index: 100;
+  width:600px;
+  background-color:black;
+  margin: 0 auto;
+}
