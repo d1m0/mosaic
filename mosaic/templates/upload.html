@@ -39,7 +39,7 @@
           {{ render_field_extra(form.milestones, "(e.g. first steps? high school graduation?)") }}
           {{ render_field_extra(form.related_submission, "(enter e-mail of person who made other submission)") }}
 
-          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div><br><div>(Max: 512MB) </div>
+          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div><br><div>(Max: 512MB. Accepted formats: mov,mp4,avi,mpg, mpeg, webm, m4v, wmv. ) </div>
           </td></tr>
           <tr>
             <td>Optional:</td>
@@ -65,6 +65,11 @@ I understand that submitting my video does not mean that this footage will be us
 
           <tr>
               <td></td>
+              <td>You will be able to submit as soon as the upload completes and required fields are filled in.</td>
+          </tr>
+
+          <tr>
+              <td></td>
               <td><input type="submit" value="Submit" id='submit_btn'></td>
           </tr>
       </table>
@@ -87,45 +92,24 @@ $(function () {
     // Change this to the location of your server-side upload handler:
     var url = '/file_upload';
 
-    var uploadButton = $('<button/>')
-        .addClass('btn btn-primary')
-        .prop('disabled', true)
-        .text('Processing...')
-        .on('click', function () {
-            var $this = $(this),
-                data = $this.data();
-            $this
-                .off('click')
-                .text('Abort')
-                .on('click', function () {
-                    $this.remove();
-                    data.abort();
-                });
-            data.context.append('<div id="progress"><div class="progress-bar" style="width: 0%">&nbsp;</div></div>')
-            data.submit().always(function () {
-                $this.remove();
-            });
-        });
-
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
-        autoUpload: false,
-        acceptFileTypes: /(\.|\/)(mov|mpeg|mp4|webm|avi)$/i,
+        autoUpload: true,
+        acceptFileTypes: /(\.|\/)(mov|mpg|mpeg|mp4|webm|avi|m4v|wmv|flv)$/i,
         maxFileSize: 512*1024*1024,
     }).on('fileuploadadd', function (e, data) {
         $('#upload_detail').html('')
         data.context = $('<div/>').appendTo('#upload_detail');
-        if (data.files.length > 1) {
-        }
         $.each(data.files, function (index, file) {
             var node = $('<p/>')
             if (!index) {
                 node
                     .append('<br>')
-                    .append(uploadButton.clone(true).data(data));
             }
             node.appendTo(data.context);
+            data.context.append('<div id="progress"><div class="progress-bar" role="progressbar" style="width: 0%">&nbsp;</div></div>')
+              data.context.append("<br><span id='time_warning'> This may take a while. Please don't close your window. You can keep on filling other fields</span>")
         });
     }).on('fileuploadprocessalways', function (e, data) {
         var index = data.index,
@@ -141,24 +125,21 @@ $(function () {
                 .append('<br>')
                 .append($('<span class="text-danger"/>').text(file.error));
         }
-        if (index + 1 === data.files.length) {
-            data.context.find('button')
-                .text('Upload')
-                .prop('disabled', !!data.files.error);
-        }
     }).on('fileuploadprogressall', function (e, data) {
         var progress = parseInt(data.loaded / data.total * 100, 10);
         $('#progress .progress-bar').css(
             'width',
             progress + '%'
         );
+        $('#progress .progress-bar').html("" + progress + "%")
     }).on('fileuploaddone', function (e, data) {
         $.each(data.result.files, function (index, file) {
             console.log(file)
             if (file.url) {
               $("#hidden_fields").append("<input type='hidden' name='video_url' value='" + file.url + "' />");
-              $("#progress").remove();
+              $('#time_warning').remove();
               $("#upload_detail").append("<span class='success'> " + file.name + " (" + parseInt(file.size/ (1024*1024.0)) + "MB) was successfully uploaded.</span>")
+              $("#submit_btn").removeAttr("disabled");
             } else if (file.error) {
                 var error = $('<span class="text-danger"/>').text(file.error);
                 $(data.context.children()[index])
@@ -175,9 +156,11 @@ $(function () {
                 .append('<br>')
                 .append(error);
         });
+        uploadInProgress = false;
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
+    $("#submit_btn").attr("disabled", "disabled");
     $("#submit_btn").on('click', function (e) {
       if ($("input[name=video_url]").length == 0) {
         alert("Need to upload a video first!");

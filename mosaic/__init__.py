@@ -35,7 +35,7 @@ if not app.debug:
 db = SQLAlchemy(app)
 
 
-videoSet = UploadSet('videos', ['mov', 'mp4', 'avi', 'mpg', 'mpeg', 'webm', 'm4v'])
+videoSet = UploadSet('videos', ['mov', 'mp4', 'avi', 'mpg', 'mpeg', 'webm', 'm4v', 'wmv', 'flv'])
 configure_uploads(app, videoSet)
 patch_request_class(app, MAX_VIDEO_SIZE)
 
