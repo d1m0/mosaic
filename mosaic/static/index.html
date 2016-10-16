@@ -50,7 +50,7 @@ d3.json("data.coords.json", function(error, data) {
     });
 
      var thisInfoW = new google.maps.InfoWindow({
-       content: "<img style='width: 150px; height: auto' src='screen_grabs/" + data[i].url + ".jpg' />"
+       content: "<img style='width: 150px; height: auto' src='demo/screen_grabs/" + data[i].url + ".jpg' />"
      });
 
     (function initMarker(m, d, iw) {

@@ -2,6 +2,7 @@
 
 .mosaic-item {
   z-index: 1000;
+  white-space:pre-wrap;
 }
 
 .mosaic-grid {
