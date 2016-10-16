@@ -265,7 +265,7 @@ class UploadForm(FlaskForm):
     courtCity = StringField('City', validators=[DataRequired()])
 
     lastChildVisit = DateField('Last child visit:', format='%d/%m/%Y', validators=[DataRequired()])
-    childVisitFrequency = IntegerField('Child visits per month', validators=[DataRequired()])
+    childVisitFrequency = IntegerField('Child visits per month', validators=[])
     numChildren = IntegerField('Number of affected kids', validators=[DataRequired()])
 
     milestones = StringField("What is the most important moment you missed?")

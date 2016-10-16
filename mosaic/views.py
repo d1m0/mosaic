@@ -36,7 +36,7 @@ def file_upload():
         file = request.files[f]
         app.logger.info(file.filename)
         ul_filename = videoSet.save(file)
-        ui_full_filename = videoSet.path(file.filename)
+        ui_full_filename = videoSet.path(ul_filename)
         app.logger.info(ul_filename + "," + ui_full_filename)
         size = os.path.getsize(ui_full_filename)
         res['files'].append({
