@@ -63,6 +63,14 @@ wget https://github.com/blueimp/jQuery-File-Upload/archive/9.12.5.zip
 unzip 9.12.5.zip
 rm 9.12.5.zip
 
+wget https://jqueryui.com/resources/download/jquery-ui-1.12.1.zip
+unzip jquery-ui-1.12.1.zip
+rm jquery-ui-1.12.1
+
+wget https://github.com/KidSysco/jquery-ui-month-picker/zipball/master
+unzip master
+rm master
+
 wget http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js
 wget http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js
 popd
