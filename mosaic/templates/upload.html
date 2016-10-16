@@ -40,7 +40,7 @@
           {{ render_field_extra(form.milestones, "(e.g. first steps? high school graduation?)") }}
           {{ render_field_extra(form.related_submission, "(enter e-mail of person who made other submission)") }}
 
-          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div><div>(Max: 512MB) </div>
+          <tr><td> Video: </td> <td> <input id="fileupload" type="file" name="files[]" data-url="file_upload" multiple=""> <div id="upload_detail"></div><br><div>(Max: 512MB) </div>
           </td></tr>
           <tr>
             <td>Optional:</td>
@@ -194,12 +194,12 @@ $(function () {
       var req_fields =  [
         "csrf_token", "email", "first_name", "last_name", "homeCountry", "homeCity",
         "courtCountry", "courtCity", "lastChildVisit", "numChildren",
-        "childVisitFrequency", "courtCosts", "milestones", "related",
+        "courtCosts", "milestones", "related",
         "submission_type", "video_url", "relationship",
         "other"
       ]
 
-      var fmData = { "tags": "" }
+      var fmData = { "tags": "", "childVisitFrequency": 0 }
 
       req_fields.forEach(function (f) {
         $("#" + f + "_err").html("")
