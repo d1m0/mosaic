@@ -53,7 +53,8 @@ def upload_submit():
     if form.validate_on_submit():
         u = User(first_name=form.first_name.data, last_name=form.last_name.data, email=form.email.data);
         # lastVisitDT = datetime.datetime.strptime(form.lastChildVisit.data, '%m/%d/%Y');
-
+        [mth, yr] = [int(v) for v in form.lastChildVisit.data.split('/')]
+        lastVisitDT = datetime.date(day=1, month=mth, year=yr)
         s = Submission(time=datetime.datetime.utcnow(),
                        submission_type=form.submission_type.data,
                        url=form.video_url.data,
@@ -63,7 +64,7 @@ def upload_submit():
                        courtCountry=form.courtCountry.data,
                        courtCity=form.courtCity.data,
                        courtCosts=form.courtCosts.data,
-                       lastChildVisit=form.lastChildVisit.data,
+                       lastChildVisit=lastVisitDT,
                        childVisitFrequency=form.childVisitFrequency.data,
                        numChildren=form.numChildren.data,
                        milestones=form.milestones.data,

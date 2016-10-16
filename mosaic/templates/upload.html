@@ -34,7 +34,8 @@
           {{ render_field(form.courtCountry) }}
           {{ render_field(form.courtCity) }}
           {{ render_field_extra(form.courtCosts, "(*excluding child support)") }}
-          {{ render_field_extra(form.lastChildVisit, "(dd/mm/yyyy)") }}
+          {{ render_field(form.lastChildVisit) }}
+          {{ render_field(form.childVisitFrequency) }}
           {{ render_field(form.numChildren) }}
           {{ render_field_extra(form.milestones, "(e.g. first steps? high school graduation?)") }}
           {{ render_field_extra(form.related_submission, "(enter e-mail of person who made other submission)") }}
@@ -89,6 +90,11 @@ I understand that submitting my video does not mean that this footage will be us
 <script>
 $(function () {
     'use strict';
+
+    $('#lastChildVisit_input').MonthPicker();
+
+
+
     // Change this to the location of your server-side upload handler:
     var url = '/file_upload';
 
