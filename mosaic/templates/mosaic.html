@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link href='static/demo/scrolling.css' rel='stylesheet'>
+<link href="static/demo/mosaic.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<section id='mosaic-section' class='mosaic-section'>
+  <div id='mosaic' class='mosaic-grid'></div>
+</section>
+<section id='map-section' class='map-section'>
+  <div id='mosaic' class='mosaic-grid'></div>
+</section>
+{% endblock %}
+
+{% block script %}
+<script src='static/jquery.easing.1.3.js'></script>
+<script src='static/lib/scrolling.js'></script>
+
+<script src="static/masonry.pkgd.min.js"></script>
+<script src='static/demo/mosaic.js'></script>
+{% endblock %}

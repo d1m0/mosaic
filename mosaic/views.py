@@ -81,6 +81,11 @@ def upload_submit():
     else:
         return dumps(form.errors)
 
+@app.route('/mosaic')
+def mosaic():
+    return render_template('mosaic.html', title='Erased Families')
+
+
 @app.route('/upload')
 def upload():
     return render_template('upload.html',

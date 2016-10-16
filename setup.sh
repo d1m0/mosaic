@@ -71,6 +71,10 @@ wget https://github.com/KidSysco/jquery-ui-month-picker/zipball/master
 unzip master
 rm master
 
+wget https://unpkg.com/masonry-layout@4.1/dist/masonry.pkgd.min.js
+
+wget http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.3.js
+
 wget http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js
 wget http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js
 popd
