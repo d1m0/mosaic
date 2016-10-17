@@ -91,6 +91,27 @@ I understand that submitting my video does not mean that this footage will be us
 $(function () {
     'use strict';
 
+    function isNumber(s) {
+      return !isNaN(s);
+    }
+
+    function addError(field, msg, focus) {
+        var error_td = $("#" + field + "_err")
+        $(error_td).append("<span class='error'>" + msg+ "</span><br>")
+        if (focus !== undefined && focus) {
+          $("input[name='" + field + "']").focus();
+        }
+    }
+
+    function clearErrors(field) {
+        $("#" + field + "_err").html("")
+    }
+
+    function setError(field, msg, focus) {
+      clearErrors(field);
+      addError(field, msg, focus);
+    }
+
     $('#lastChildVisit_input').MonthPicker();
 
 
@@ -177,15 +198,15 @@ $(function () {
       var req_fields =  [
         "csrf_token", "email", "first_name", "last_name", "homeCountry", "homeCity",
         "courtCountry", "courtCity", "lastChildVisit", "numChildren",
-        "courtCosts", "milestones", "related",
+        "courtCosts", "milestones", "related", "childVisitFrequency",
         "submission_type", "video_url", "relationship",
         "other"
       ]
 
-      var fmData = { "tags": "", "childVisitFrequency": 0 }
+      var fmData = { "tags": "" }
 
       req_fields.forEach(function (f) {
-        $("#" + f + "_err").html("")
+        clearErrors(f);
         var inps = $("input[name=" + f + "], select[name=" + f + "]")
         if (inps.length == 0 || inps[0].value === undefined) {
           fmData[f] = "";
@@ -193,6 +214,33 @@ $(function () {
           fmData[f] = inps[0].value;
         }
       })
+
+      if (!isNumber(fmData["courtCosts"])) {
+        setError("courtCosts", "Please type a number (without $, or commas)", true)
+        e.stopPropagation();
+        return false;
+      }
+
+      if (!isNumber(fmData["numChildren"])) {
+        setError("numChildren", "Please type a number.", true)
+        e.stopPropagation();
+        return false;
+      }
+
+      if (!isNumber(fmData["childVisitFrequency"])) {
+        setError("childVisitFrequency", "Please type a number.", true)
+        e.stopPropagation();
+        return false;
+      }
+
+      if (/^[0-9]{1,2}\/[0-9]{1,4}/.exec(fmData["lastChildVisit"]) == null) {
+        setError("lastChildVisit", "Please enter a month/year or use the date picker button.", true)
+        e.stopPropagation();
+        return false;
+      }
+
+      fmData["courtCosts"] = parseInt(fmData["courtCosts"]);
+
 
       fmData["name"] = $('input[name="first_name"]')[0].value + " " +
                         $('input[name="last_name"]')[0].value
@@ -208,16 +256,17 @@ $(function () {
         data: fmData,
         dataType: "JSON",
         success: function (res) {
+          console.log(res);
           var noErrors = true;
           for (var field in res) {
-            noErrors = false;
             var msgs= res[field];
             if (msgs.length == 0) return;
 
-            var error_td = $("#" + field + "_err")
             for (var i in msgs) {
-              $(error_td).append("<span class='error'>" + msgs[i]+ "</span><br>")
+              addError(field, msgs[i], noErrors)
+              noErrors = false;
             }
+
           }
 
           if (noErrors) {
