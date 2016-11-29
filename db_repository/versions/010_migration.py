@@ -6,9 +6,9 @@ from migrate.changeset import schema
 pre_meta = MetaData()
 post_meta = MetaData()
 user = Table('user', pre_meta,
-    Column('id', INTEGER, primary_key=True, nullable=False),
-    Column('name', VARCHAR(length=120)),
-    Column('email', VARCHAR(length=120)),
+    Column('id', INTEGER(display_width=11), primary_key=True, nullable=False),
+    Column('name', VARCHAR(collation=u'utf8_bin', length=120)),
+    Column('email', VARCHAR(collation=u'utf8_bin', length=120)),
 )
 
 user = Table('user', post_meta,
@@ -35,8 +35,8 @@ submission = Table('submission', post_meta,
     Column('relation', Enum('erased_mom', 'erased_dad', 'erased_sister', 'erased_brother', 'erased_grandparent', 'erased_aunt_or_uncle', 'erased_cousin', 'erased_other_family', 'erased_step_family', 'erased_friend')),
     Column('ip', String(length=128)),
     Column('tags', String(length=1024)),
-    Column('milestone', String(length=1024)),
-    Column('related', String(length=512)),
+    Column('milestones', String(length=1024)),
+    Column('related_submission', String(length=512)),
     Column('other', String(length=1000)),
 )
 
@@ -49,8 +49,8 @@ def upgrade(migrate_engine):
     pre_meta.tables['user'].columns['name'].drop()
     post_meta.tables['user'].columns['first_name'].create()
     post_meta.tables['user'].columns['last_name'].create()
-    post_meta.tables['submission'].columns['milestone'].create()
-    post_meta.tables['submission'].columns['related'].create()
+    post_meta.tables['submission'].columns['milestones'].create()
+    post_meta.tables['submission'].columns['related_submission'].create()
 
 
 def downgrade(migrate_engine):
@@ -60,5 +60,5 @@ def downgrade(migrate_engine):
     pre_meta.tables['user'].columns['name'].create()
     post_meta.tables['user'].columns['first_name'].drop()
     post_meta.tables['user'].columns['last_name'].drop()
-    post_meta.tables['submission'].columns['milestone'].drop()
-    post_meta.tables['submission'].columns['related'].drop()
+    post_meta.tables['submission'].columns['milestones'].drop()
+    post_meta.tables['submission'].columns['related_submission'].drop()
